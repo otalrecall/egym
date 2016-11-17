@@ -50,22 +50,7 @@ public class JSONParser {
                     User user = new User();
                     JSONObject oneObject = jsonArray.getJSONObject(i);
 
-                    // Pulling items from the array
-                    JSONObject oneObjectPicture = oneObject.getJSONObject("picture");
-                    user.setLargePicture( oneObjectPicture.getString("large") );
-                    user.setThumbnail( oneObjectPicture.getString("thumbnail") );
-                    user.setUsername(oneObject.getJSONObject("login").getString("username"));
-                    user.setPhone( oneObject.getString("phone") );
-                    user.setGender( User.Gender.valueOf(oneObject.getString("gender").toUpperCase()) );
-                    JSONObject oneObjectName = oneObject.getJSONObject("name");
-                    user.setTitle( oneObjectName.getString("title") );
-                    user.setFirstName( oneObjectName.getString("first") );
-                    user.setLastName( oneObjectName.getString("last") );
-                    JSONObject oneObjectLocation = oneObject.getJSONObject("location");
-                    user.setStreet( oneObjectLocation.getString("street") );
-                    user.setCity( oneObjectLocation.getString("city") );
-                    user.setState( oneObjectLocation.getString("state") );
-                    user.setPostcode( oneObjectLocation.getString("postcode") );
+                    buildUser(user, oneObject);
 
                     // Add to list of users
                     users.add(user);
@@ -80,5 +65,38 @@ public class JSONParser {
         }
 
         return users;
+    }
+
+    /**
+     * Adds all the data from the json object to the User user.
+     *
+     * @param user
+     * @param jsonObject
+     */
+    private static void buildUser(User user, JSONObject jsonObject) {
+        try {
+            JSONObject jsonPicture = jsonObject.getJSONObject("picture");
+            user.setLargePicture(jsonPicture.getString("large"));
+            user.setThumbnail(jsonPicture.getString("thumbnail"));
+
+            user.setUsername(jsonObject.getJSONObject("login").getString("username"));
+            user.setPhone(jsonObject.getString("phone"));
+            user.setGender(User.Gender.valueOf(jsonObject.getString("gender").toUpperCase()));
+
+            JSONObject jsonName = jsonObject.getJSONObject("name");
+            user.setTitle(jsonName.getString("title"));
+            user.setFirstName(jsonName.getString("first"));
+            user.setLastName(jsonName.getString("last"));
+
+            JSONObject jsonLocation = jsonObject.getJSONObject("location");
+            user.setStreet(jsonLocation.getString("street"));
+            user.setCity(jsonLocation.getString("city"));
+            user.setState(jsonLocation.getString("state"));
+            user.setPostcode(jsonLocation.getString("postcode"));
+        }
+        catch (JSONException e) {
+            Log.e("JSONParser", "" + e);
+        }
+
     }
 }

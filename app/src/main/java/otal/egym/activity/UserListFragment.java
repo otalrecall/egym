@@ -1,18 +1,74 @@
 package otal.egym.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
-import otal.egym.model.User;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UserListFragment extends ListFragment {
+import otal.egym.model.JSONParser;
+import otal.egym.model.User;
+import otal.egym.model.UserAdapter;
+
+public class UserListFragment extends ListFragment  {
+
+    private String apiURL;
+    private int page;
+    private List<User> currentUsers;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initVar();
+        new ParseJSON().execute(apiURL);
+        setListeners();
+    }
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
         launchUserDetailActivity(position);
+    }
+
+    /**
+     * Initializes the variables
+     */
+    private void initVar() {
+        currentUsers = new ArrayList<>();
+        page = 1;
+        apiURL = "https://api.randomuser.me/?seed=egym&page=" + page + "&results=10";
+    }
+
+    /**
+     * Sets the listener to check when the scroll view hits the bottom of the screen to implement
+     * pagination.
+     */
+    private void setListeners() {
+        final ListView listView = getListView();
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                        && (listView.getLastVisiblePosition() - listView.getHeaderViewsCount() -
+                        listView.getFooterViewsCount()) >= (listView.getAdapter().getCount() - 1)) {
+
+                    // ListView has hit the bottom
+                    ++page;
+                    apiURL = "https://api.randomuser.me/?seed=egym&page=" + page + "&results=10";
+                    new ParseJSON().execute(apiURL);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
     }
 
     /**
@@ -37,5 +93,31 @@ public class UserListFragment extends ListFragment {
         intent.putExtra(MainActivity.USER_ID_EXTRA, user.getId());
 
         startActivity(intent);
+    }
+
+    private class ParseJSON extends AsyncTask< String, Void, List<User> > {
+
+        @Override
+        protected List<User> doInBackground(String... strings) {
+            return JSONParser.parseJSON(strings[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<User> users) {
+            UserAdapter userAdapter;
+
+            // If it's the first time we fill the list, creates adapter. If not, updates it.
+            if (currentUsers.isEmpty()) {
+                currentUsers = users;
+                userAdapter = new UserAdapter(getContext(), currentUsers);
+                setListAdapter(userAdapter);
+            }
+            else {
+                currentUsers.addAll(users);
+                userAdapter = (UserAdapter) getListAdapter();
+                userAdapter.notifyDataSetChanged();
+            }
+
+        }
     }
 }

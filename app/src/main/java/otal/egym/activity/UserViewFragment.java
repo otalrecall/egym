@@ -35,13 +35,13 @@ public class UserViewFragment extends Fragment {
         TextView username = (TextView) fragmentLayout.findViewById(R.id.userViewUsername);
         TextView phone = (TextView) fragmentLayout.findViewById(R.id.userViewPhone);
         TextView gender = (TextView) fragmentLayout.findViewById(R.id.userViewGender);
-        TextView fullname = (TextView) fragmentLayout.findViewById(R.id.userViewFullname);
+        TextView fullName = (TextView) fragmentLayout.findViewById(R.id.userViewFullname);
         TextView street = (TextView) fragmentLayout.findViewById(R.id.userViewStreet);
         TextView location = (TextView) fragmentLayout.findViewById(R.id.userViewLocation);
 
         Intent intent = getActivity().getIntent();
         username.setText(intent.getExtras().getString(MainActivity.USERNAME_EXTRA));
-        fullname.setText(intent.getExtras().getString(MainActivity.FULLNAME_EXTRA));
+        fullName.setText(intent.getExtras().getString(MainActivity.FULLNAME_EXTRA));
         street.setText(intent.getExtras().getString(MainActivity.STREET_EXTRA));
         location.setText(intent.getExtras().getString(MainActivity.LOCATION_EXTRA));
         phone.setText(intent.getExtras().getString(MainActivity.PHONE_EXTRA));
