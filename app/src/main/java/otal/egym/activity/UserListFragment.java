@@ -16,14 +16,15 @@ import otal.egym.model.User;
 import otal.egym.model.UserAdapter;
 
 public class UserListFragment extends ListFragment  {
-
     private String apiURL;
     private int page;
+    private int results;
     private List<User> currentUsers;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         initVar();
         new ParseJSON().execute(apiURL);
         setListeners();
@@ -41,7 +42,9 @@ public class UserListFragment extends ListFragment  {
     private void initVar() {
         currentUsers = new ArrayList<>();
         page = 1;
-        apiURL = "https://api.randomuser.me/?seed=egym&page=" + page + "&results=10";
+        results = 10;
+        apiURL = String.format("https://api.randomuser.me/?seed=egym&page=%d&results=%d",
+                page, results);
     }
 
     /**
@@ -59,7 +62,7 @@ public class UserListFragment extends ListFragment  {
 
                     // ListView has hit the bottom
                     ++page;
-                    apiURL = "https://api.randomuser.me/?seed=egym&page=" + page + "&results=10";
+                    apiURL = String.format("https://api.randomuser.me/?seed=egym&page=%d&results=%d", page, 10);
                     new ParseJSON().execute(apiURL);
                 }
             }
