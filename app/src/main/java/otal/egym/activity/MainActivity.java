@@ -2,10 +2,8 @@ package otal.egym.activity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.widget.ListView;
 
 import java.util.List;
 
@@ -25,22 +23,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        //ListView userListView = (ListView) findViewById(R.id.userListView);
+        ListFragment userListFragment = (ListFragment) getSupportFragmentManager().findFragmentById(R.id.userListFragment);
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.userListFragment);
-        ListView userListView = (ListView) findViewById(R.id.userListView);
-
-        new ParseJSON(userListView).execute(API_URL);
+        new ParseJSON(userListFragment).execute(API_URL);
     }
 
     private class ParseJSON extends AsyncTask< String, Void, List<User> > {
 
-        ListView userListView;
+        ListFragment userListFragment;
 
-        ParseJSON(ListView userListView) {
-            this.userListView = userListView;
+        ParseJSON(ListFragment userListFragment) {
+            this.userListFragment = userListFragment;
         }
 
         @Override
@@ -51,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<User> users) {
             UserAdapter userAdapter = new UserAdapter(MainActivity.this, users);
-            userListView.setAdapter(userAdapter);
+            userListFragment.setListAdapter(userAdapter);
         }
     }
 }

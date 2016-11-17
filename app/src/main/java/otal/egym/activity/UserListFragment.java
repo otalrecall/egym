@@ -12,15 +12,8 @@ import otal.egym.model.User;
 public class UserListFragment extends ListFragment {
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.e("HOLA", "OH MAAAAN");
-    }
-
-    @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        Log.e("HOLA", "YEHAAAAA");
         launchUserDetailActivity(position);
     }
 
