@@ -15,9 +15,14 @@ import otal.egym.model.UserAdapter;
 public class MainActivity extends AppCompatActivity {
 
     public static final String API_URL = "https://api.randomuser.me/?seed=egym&page=1&results=50";
+    public static final String USER_ID_EXTRA = "otal.egym.id";
+    public static final String GENDER_EXTRA = "otal.egym.gender";
+    public static final String FULLNAME_EXTRA = "otal.egym.fullname";
+    public static final String STREET_EXTRA = "otal.egym.street";
+    public static final String LOCATION_EXTRA = "otal.egym.location";
+    public static final String LARGE_PIC_EXTRA = "otal.egym.largePic";
     public static final String USERNAME_EXTRA = "otal.egym.username";
     public static final String PHONE_EXTRA = "otal.egym.phone";
-    public static final String IMG_EXTRA = "otal.egym.img";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

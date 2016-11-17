@@ -18,9 +18,16 @@ import java.util.List;
 
 public class JSONParser {
 
+    /**
+     * Parses the JSON from the URL and returns a list of User
+     *
+     * @param urlJson
+     * @return
+     */
     public static List<User> parseJSON(String urlJson) {
         List<User> users = new ArrayList<>();
         try {
+            // Get the JSON from the URL
             URL url = new URL(urlJson);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
@@ -28,6 +35,7 @@ public class JSONParser {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
             StringBuilder builder = new StringBuilder();
 
+            // Parse the JSON String to a JSONObject
             String inputString;
             while ((inputString = bufferedReader.readLine()) != null) {
                 builder.append(inputString);
@@ -36,6 +44,7 @@ public class JSONParser {
             JSONObject jsonObject = new JSONObject(builder.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
+            // Instantiate an user for every element in the JSON array
             for (int i=0; i < jsonArray.length(); i++) {
                 try {
                     User user = new User();
@@ -44,10 +53,19 @@ public class JSONParser {
                     // Pulling items from the array
                     JSONObject oneObjectPicture = oneObject.getJSONObject("picture");
                     user.setLargePicture( oneObjectPicture.getString("large") );
-                    user.setMediumPicture( oneObjectPicture.getString("medium") );
                     user.setThumbnail( oneObjectPicture.getString("thumbnail") );
                     user.setUsername(oneObject.getJSONObject("login").getString("username"));
                     user.setPhone( oneObject.getString("phone") );
+                    user.setGender( User.Gender.valueOf(oneObject.getString("gender").toUpperCase()) );
+                    JSONObject oneObjectName = oneObject.getJSONObject("name");
+                    user.setTitle( oneObjectName.getString("title") );
+                    user.setFirstName( oneObjectName.getString("first") );
+                    user.setLastName( oneObjectName.getString("last") );
+                    JSONObject oneObjectLocation = oneObject.getJSONObject("location");
+                    user.setStreet( oneObjectLocation.getString("street") );
+                    user.setCity( oneObjectLocation.getString("city") );
+                    user.setState( oneObjectLocation.getString("state") );
+                    user.setPostcode( oneObjectLocation.getString("postcode") );
 
                     // Add to list of users
                     users.add(user);

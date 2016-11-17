@@ -1,9 +1,7 @@
 package otal.egym.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -18,6 +16,8 @@ public class UserListFragment extends ListFragment {
     }
 
     /**
+     * Once a user is selected in the list, creates an intent and adds every piece of information
+     * needed for UserDetailActivity
      *
      * @param position
      */
@@ -27,7 +27,14 @@ public class UserListFragment extends ListFragment {
         Intent intent = new Intent(getActivity(), UserDetailActivity.class);
         intent.putExtra(MainActivity.USERNAME_EXTRA, user.getUsername());
         intent.putExtra(MainActivity.PHONE_EXTRA, user.getPhone());
-        intent.putExtra(MainActivity.IMG_EXTRA, user.getThumbnail());
+        intent.putExtra(MainActivity.GENDER_EXTRA, user.getGender());
+        intent.putExtra(MainActivity.FULLNAME_EXTRA, user.getTitle() + " " + user.getFirstName() +
+                " " + user.getLastName());
+        intent.putExtra(MainActivity.STREET_EXTRA, user.getStreet());
+        intent.putExtra(MainActivity.LOCATION_EXTRA, user.getPostcode() + " " + user.getCity() +
+                ", " + user.getState());
+        intent.putExtra(MainActivity.LARGE_PIC_EXTRA, user.getLargePicture());
+        intent.putExtra(MainActivity.USER_ID_EXTRA, user.getId());
 
         startActivity(intent);
     }
