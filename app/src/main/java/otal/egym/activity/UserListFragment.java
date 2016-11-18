@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -33,6 +35,12 @@ public class UserListFragment extends ListFragment  {
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
+
+        // Start an alpha animation for clicked item
+        Animation animation = new AlphaAnimation(0.3f, 1.0f);
+        animation.setDuration(4000);
+        view.startAnimation(animation);
+        
         launchUserDetailActivity(position);
     }
 
